@@ -12,8 +12,44 @@ const nextConfig: NextConfig = {
                 destination: "/admin/register",
             },
             {
+                source: "/quan-ly/dat-phong",
+                destination: "/admin/bookings",
+            },
+            {
                 source: "/quan-ly/trang-chu",
                 destination: "/admin/dashboard",
+            },
+            {
+                source: "/quan-ly/khach-san",
+                destination: "/admin/hotels",
+            },
+            {
+                source: "/quan-ly/cham-cong",
+                destination: "/admin/attendance",
+            },
+            {
+                source: "/quan-ly/cham-cong/phan-ca",
+                destination: "/admin/attendance/shifts",
+            },
+            {
+                source: "/quan-ly/danh-gia",
+                destination: "/admin/evaluations",
+            },
+            {
+                source: "/quan-ly/hieu-suat",
+                destination: "/admin/kpi",
+            },
+            {
+                source: "/quan-ly/luong-thuong",
+                destination: "/admin/payroll",
+            },
+            {
+                source: "/quan-ly/bao-cao",
+                destination: "/admin/reports",
+            },
+            {
+                source: "/quan-ly/su-kien",
+                destination: "/admin/events",
             },
         ];
     },

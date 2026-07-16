@@ -13,10 +13,9 @@ export function useAuth() {
         try {
             const res = await authService.login({
                 email,
-                password,
+                password,   
             });
-            console.log(res.data);
-            loginStore(res.data.data.accessToken,res.data.data.user.role);
+            loginStore(res.data.data.accessToken,res.data.data.user.role,res.data.data.user);
 
             toast.success(res.data.message);
 
