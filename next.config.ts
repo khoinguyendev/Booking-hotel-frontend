@@ -20,16 +20,20 @@ const nextConfig: NextConfig = {
                 destination: "/admin/dashboard",
             },
             {
+                source: "/quan-ly/nhan-vien",
+                destination: "/admin/users",
+            },
+            {
                 source: "/quan-ly/khach-san",
                 destination: "/admin/hotels",
             },
             {
-                source: "/quan-ly/cham-cong",
-                destination: "/admin/attendance",
+                source: "/quan-ly/khach-san/:id",
+                destination: "/admin/hotels/[id]",
             },
             {
-                source: "/quan-ly/cham-cong/phan-ca",
-                destination: "/admin/attendance/shifts",
+                source: "/quan-ly/cham-cong",
+                destination: "/admin/attendance",
             },
             {
                 source: "/quan-ly/danh-gia",
@@ -50,6 +54,18 @@ const nextConfig: NextConfig = {
             {
                 source: "/quan-ly/su-kien",
                 destination: "/admin/events",
+            },
+            {
+                source: "/trang-chu/khach-san",
+                destination: "/main/hotels",
+            },
+            {
+                source: "/trang-chu/khach-san/:id",
+                destination: "/main/hotels/[id]",
+            },
+            {
+                source: "/trang-chu",
+                destination: "/main",
             },
         ];
     },
