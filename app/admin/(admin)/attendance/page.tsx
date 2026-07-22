@@ -4,27 +4,47 @@
 import React, { useState, useEffect } from 'react';
 import { AttendanceFilter, AttendanceTable } from '@/components/attendance';
 import { getMockAttendanceData, AttendanceRecord } from '@/services/attendance.service';
-
+import {staffService} from '@/services/staft.service';
+import { HotelStaff } from '@/types/staff';
 export default function AttendancePage() {
-  const [records, setRecords] = useState<AttendanceRecord[]>([]);
+  // const [records, setRecords] = useState<AttendanceRecord[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDept, setSelectedDept] = useState('All');
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+const [loading, setLoading] = useState(false);
+const [employees, setEmployees] = useState<HotelStaff[]>([]);
 
-  useEffect(() => {
-    setRecords(getMockAttendanceData());
-  }, []);
+useEffect(() => {
+    const fetchEmployees = async () => {
+        try {
+            setLoading(true);
 
-  // Xử lý logic lọc đa điều kiện cùng lúc (Tên/Mã + Phòng ban + Ngày nếu có trong cấu trúc dữ liệu thực tế)
-  const filteredRecords = records.filter(rec => {
-    const matchQuery = rec.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                       rec.id.toLowerCase().includes(searchQuery.toLowerCase());
+            const response = await staffService.getEmployee();
+            console.log('Fetched employees:', response); // ✅ Kiểm tra dữ liệu nhân viên
+            setEmployees(response.data.data.items); // ✅ Đúng
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchEmployees();
+}, []);
+  // useEffect(() => {
+  //   setRecords(getMockAttendanceData());
+  // }, []);
+  console.log('employees', employees); // ✅ Kiểm tra dữ liệu nhân viên
+  // // Xử lý logic lọc đa điều kiện cùng lúc (Tên/Mã + Phòng ban + Ngày nếu có trong cấu trúc dữ liệu thực tế)
+  // // const filteredRecords = records.filter(rec => {
+  // //   const matchQuery = rec.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+  // //                      rec.id.toLowerCase().includes(searchQuery.toLowerCase());
     
-    const matchDept = selectedDept === 'All' || rec.department.includes(selectedDept);
+  // //   const matchDept = selectedDept === 'All' || rec.department.includes(selectedDept);
     
-    // Tạm thời mockup lọc theo query & dept, khi có data backend bạn chỉ việc thêm logic lọc theo ngày:
-    return matchQuery && matchDept;
-  });
+  // //   // Tạm thời mockup lọc theo query & dept, khi có data backend bạn chỉ việc thêm logic lọc theo ngày:
+  // //   return matchQuery && matchDept;
+  // });
 
   return (
     <div className="space-y-6 bg-[#F2F2F7] dark:bg-[#000000] min-h-full p-4 sm:p-6 text-[#1C1C1E] dark:text-white font-sans antialiased transition-colors duration-300">
@@ -40,7 +60,7 @@ export default function AttendancePage() {
         onDateChange={setSelectedDate}
       />
       
-      <AttendanceTable records={filteredRecords} />
+      <AttendanceTable records={employees} />
     </div>
   );
 }
