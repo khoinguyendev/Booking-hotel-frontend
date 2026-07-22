@@ -15,7 +15,7 @@ export function useAuth() {
                 email,
                 password,   
             });
-            loginStore(res.data.data.accessToken,res.data.data.user.role,res.data.data.user);
+            loginStore(res.data.data.accessToken,res.data.data.user.role,res.data.data.user as any);
 
             toast.success(res.data.message);
 
