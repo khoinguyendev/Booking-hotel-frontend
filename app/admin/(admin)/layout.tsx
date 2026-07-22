@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '@/components/dashboard/Sidebar';
-import { ProfileModal } from '@/components/dashboard/ProfileModal'; // Import Modal mới tại đây
+import { ProfileModal } from '@/components/dashboard/ProfileModal'; 
 import { useDashboardStore } from '@/store/dashboard.store';
 import { useAuthStore } from '@/store/auth.store';
 import { Menu, LogOut, Bell, ShieldCheck, ChevronDown, User } from 'lucide-react';
@@ -14,7 +14,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { user, logout } = useAuthStore();
   const router = useRouter();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false); // Trạng thái mở Profile Modal
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false); 
+
+  // ĐÃ THÊM: Tránh lỗi Hydration
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -42,8 +48,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return (parts[parts.length - 2][0] + parts[parts.length - 1][0]).toUpperCase();
   };
 
-  const userFullName = user?.fullName || 'Quản trị viên';
-  const userAvatar = user?.avatar;
+  // Chỉ lấy dữ liệu thật từ client sau khi mounted
+  const userFullName = mounted && user ? user.fullName || 'Quản trị viên' : 'Quản trị viên';
+  const userAvatar = mounted ? user?.avatar : null;
 
   return (
     <div className="min-h-screen bg-[#F2F2F7] dark:bg-[#000000] flex transition-colors duration-300">
@@ -81,7 +88,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <span className="h-5 w-[1px] bg-[#E5E5EA] dark:bg-[#2C2C2E]" />
 
             <div className="relative">
-              {/* BẤM VÀO TÊN HOẶC CỤM USER ĐỂ KÍCH HOẠT DROPDOWN/MODAL */}
               <button 
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 className="flex items-center space-x-2 p-1 hover:bg-[#E5E5EA]/50 dark:hover:bg-[#2C2C2E]/50 rounded-xl transition-all active:scale-95"
@@ -108,8 +114,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setIsUserMenuOpen(false)} />
                   <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#1C1C1E] border border-[#E5E5EA] dark:border-[#2C2C2E] rounded-2xl shadow-xl py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                    
-                    {/* Mục bấm vào thông tin tóm tắt để mở thẳng Modal chỉnh sửa */}
                     <button 
                       onClick={() => {
                         setIsUserMenuOpen(false);
@@ -121,7 +125,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       <p className="text-xs font-bold text-[#1C1C1E] dark:text-white truncate mt-0.5">{userFullName}</p>
                     </button>
 
-                    {/* Mục Chỉnh sửa hồ sơ */}
                     <button
                       onClick={() => {
                         setIsUserMenuOpen(false);
@@ -133,7 +136,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       <span>Chỉnh sửa Profile</span>
                     </button>
 
-                    {/* Đăng xuất */}
                     <button
                       onClick={() => {
                         setIsUserMenuOpen(false);
@@ -156,7 +158,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </main>
       </div>
 
-      {/* RENDER PROFILE MODAL TẠI ĐÂY */}
       <ProfileModal 
         isOpen={isProfileModalOpen} 
         onClose={() => setIsProfileModalOpen(false)} 
