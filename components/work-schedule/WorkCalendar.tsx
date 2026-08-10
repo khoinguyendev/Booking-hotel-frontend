@@ -7,24 +7,16 @@ import CalendarLegend from './CalendarLegend';
 import CalendarDay from './CalendarDay';
 import { Shift } from '@/types/shift';
 import { shiftService } from '@/services/shift.service';
+import { WorkScheduleResponse } from '@/types/workSchedule';
 
-export interface ShiftResponse {
-  id: number;
-  name: string;
-  startTime: string;
-  endTime: string;
-}
 
-export interface WorkScheduleResponse {
-  id: number;
-  workDate: string;
-  isDayOff: boolean;
-  shift: ShiftResponse | null;
-  attendance: any;
-}
+
+
 
 interface Props {
+  currentDate:Date,
   schedules: WorkScheduleResponse[];
+  setDate:(date:Date)=>void;
 }
 
 interface CalendarCell {
@@ -44,8 +36,9 @@ const WEEKDAYS = [
 
 export default function WorkCalendar({
   schedules,
+  currentDate,
+  setDate
 }: Props) {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
     const [shifts, setShifts] = useState<Shift[]>([]);
 
   const scheduleMap = useMemo(() => {
@@ -55,13 +48,13 @@ export default function WorkCalendar({
   }, [schedules]);
 
   const calendar = useMemo(() => {
-    return buildCalendar(currentMonth);
-  }, [currentMonth]);
+    return buildCalendar(currentDate);
+  }, [currentDate]);
 
   useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await shiftService.getShifts();
+            const response = await shiftService.getAll();
 
             setShifts(response.data.data);
           } catch (error) {
@@ -75,27 +68,27 @@ export default function WorkCalendar({
     <div className="space-y-6">
 
       <CalendarHeader
-        month={currentMonth}
+        month={currentDate}
         onPrevious={() =>
-          setCurrentMonth(
+          setDate(
             new Date(
-              currentMonth.getFullYear(),
-              currentMonth.getMonth() - 1,
+              currentDate.getFullYear(),
+              currentDate.getMonth() - 1,
               1
             )
           )
         }
         onNext={() =>
-          setCurrentMonth(
+          setDate(
             new Date(
-              currentMonth.getFullYear(),
-              currentMonth.getMonth() + 1,
+              currentDate.getFullYear(),
+              currentDate.getMonth() + 1,
               1
             )
           )
         }
         onToday={() =>
-          setCurrentMonth(new Date())
+          setDate(new Date())
         }
       />
 

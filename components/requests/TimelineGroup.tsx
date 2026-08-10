@@ -4,11 +4,11 @@ import { format, isToday, isYesterday, parseISO } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
 import RequestCard from './RequestCard';
-import { StaffRequest } from '@/types/requests';
+import { RequestResponse } from '@/types/requests';
 
 interface Props {
-  requests: StaffRequest[];
-  onSelect: (request: StaffRequest) => void;
+  requests: RequestResponse[];
+  onSelect: (request: RequestResponse) => void;
 }
 
 export default function TimelineGroup({
@@ -16,7 +16,6 @@ export default function TimelineGroup({
   onSelect,
 }: Props) {
   const groups = groupByDate(requests);
-
   return (
     <div className="space-y-10">
       {groups.map((group) => (
@@ -50,16 +49,20 @@ export default function TimelineGroup({
   );
 }
 
-function groupByDate(data: StaffRequest[]) {
-  const map = new Map<string, StaffRequest[]>();
+function groupByDate(data: RequestResponse[]) {
+  const map = new Map<string, RequestResponse[]>();
 
-  data
+  [...data]
     .sort(
       (a, b) =>
         new Date(b.createdAt).getTime() -
-        new Date(a.createdAt).getTime()
+        new Date(a.createdAt).getTime(),
     )
     .forEach((item) => {
+      if (!item.createdAt) {
+        return;
+      }
+
       const key = item.createdAt.split("T")[0];
 
       if (!map.has(key)) {

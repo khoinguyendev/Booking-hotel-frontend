@@ -10,12 +10,7 @@ import {
 } from "lucide-react";
 
 import RequestStatusBadge from "./RequestStatusBadge";
-import {
-  LeaveData,
-  OvertimeData,
-  ShiftChangeData,
-  StaffRequest,
-} from "@/types/requests";
+
 import { useAuthStore } from "@/store/auth.store";
 import { staffService } from "@/services/staft.service";
 import { requestService } from "@/services/request.service";

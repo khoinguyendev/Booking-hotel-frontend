@@ -52,4 +52,15 @@ export const hotelStaffService = {
       `/hotel-staffs/${id}`
     );
   },
+
+  importStaff(file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    return api.post("/hotel-staffs/import", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
 };

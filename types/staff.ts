@@ -33,8 +33,21 @@ export interface HotelStaff {
   phone: string | null;
   avatar: string | null;
   position: string;
+  positionId: number;
   joinedAt: string;
   status: boolean;
   workSchedule: WorkSchedule | null;
 }
 
+export interface IStaffStats {
+  totalStaff: number;
+  workingStaff: number;
+  noShiftStaff: number;
+  dayOffStaff: number;
+}
+
+export interface ImportError {
+  row: number;
+  field: string;
+  message: string;
+}

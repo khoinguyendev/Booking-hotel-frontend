@@ -1,3 +1,5 @@
+import { OvertimeResponse } from "@/services/overtimeService.service";
+
 export interface Shift {
   id: number;
   name: string;
@@ -24,14 +26,60 @@ export interface WorkSchedule {
 
 export interface AttendanceRecord {
   id: number;
-  userId: number;
-  fullName: string;
+
+  employeeId: number;
+
   employeeCode: string;
-  email: string;
-  phone: string;
-  avatar: string | null;
+
+  fullName: string;
+
+  avatar?: string;
+
   position: string;
-  joinedAt: string;
-  status: boolean;
-  workSchedule: WorkSchedule;
+
+  shift: string;
+
+  workDate: string;
+  overtime?:OvertimeResponse|null;
+
+  checkInTime?: string;
+
+  checkOutTime?: string;
+
+  status: AttendanceType;
+  note?: string;
 }
+
+
+export interface AttendanceStatsResponse {
+  working: number;
+  present: number;
+  late: number;
+  notCheckIn: number;
+  absent: number;
+  total:number
+}
+
+export interface CalendarAttendanceResponse {
+  date: string;
+  working: number;
+  present: number;
+  late: number;
+  absent: number;
+}
+
+export enum AttendanceType {
+  Absent = 0,
+  Present = 1,
+  Late = 2,
+  Leave = 3,
+  Holiday = 4,
+}
+
+export const ATTENDANCES_TYPE_LABEL: Record<AttendanceType, string> = {
+  [AttendanceType.Absent]: "Vắng",
+  [AttendanceType.Present]: "Đã checkin",
+  [AttendanceType.Holiday]: "Nghỉ lễ",
+  [AttendanceType.Late]: "Đi muộn",
+  [AttendanceType.Leave]: "Nghỉ có phép",
+};

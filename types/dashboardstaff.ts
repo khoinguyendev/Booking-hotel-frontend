@@ -1,6 +1,8 @@
 export type AttendanceStatus =
   | "Present"
   | "Late"
+  | "DayOff"
+  | "NotCheckIn"
   | "Absent"
   | "Leave";
 

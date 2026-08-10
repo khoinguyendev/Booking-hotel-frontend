@@ -16,6 +16,7 @@ export default function LoginForm() {
         try {
             setLoading(true);
             await login(email, password);
+            
         } catch (error) {
             console.error(error);
         } finally {

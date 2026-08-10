@@ -13,13 +13,13 @@ import LeaveRequestForm, {
 import ShiftChangeRequestForm, {
   ShiftChangeRequestFormRef,
 } from "../forms/ShiftChangeRequestForm";
-import OvertimeRequestForm from "../forms/OvertimeRequestForm";
+import OvertimeRequestForm, { OvertimeFormData, OvertimeRequestFormRef } from "../forms/OvertimeRequestForm";
 import SubmitFooter from "./SubmitFooter";
 import { format } from "date-fns";
 import { requestService } from "@/services/request.service";
 import toast from "react-hot-toast";
-import { WorkScheduleResponse } from "../work-schedule/WorkCalendar";
 import { ShiftChangeRequest } from "@/types/requests";
+import Loading from "../common/Spinner";
 
 export type RequestTab = "leave" | "shift" | "overtime";
 export interface CreateLeaveRequest {
@@ -36,8 +36,9 @@ interface Props {
 export default function CreateRequestDialog({ open, onOpenChange }: Props) {
   const [tab, setTab] = useState<RequestTab>("leave");
   const leaveFormRef = useRef<LeaveRequestFormRef>(null);
+  const overtimeFormRef =useRef<OvertimeRequestFormRef>(null);
   const shiftFormRef = useRef<ShiftChangeRequestFormRef>(null);
-  
+  const [loading,setLoading]=useState(false);
   const handleLeaveSubmit = async (data: LeaveRequestFormData) => {
     const payload = {
       fromDate: format(data.fromDate, "yyyy-MM-dd"),
@@ -45,24 +46,28 @@ export default function CreateRequestDialog({ open, onOpenChange }: Props) {
       reason: data.reason,
     };
     try {
+    setLoading(true)
       // Call the API to create the leave request
-      const response = await requestService.createLeaveRequest(payload);
+      await requestService.createLeaveRequest(payload);
       toast.success("Leave request created successfully!");
     } catch (error) {
       toast.error("Failed to create leave request.");
+    }finally{
+      setLoading(false)
     }
   };
   const handleChangeShiftSubmit = async (data: ShiftChangeRequest) => {
     try {
       // Call the API to create the shift change request
-      const response = await requestService.createShiftChangeRequest(data);
+      await requestService.createShiftChangeRequest(data);
       toast.success("Shift change request created successfully!");
-      console.log("Shift Change Request Response:", response.data);
     } catch (error) {
       toast.error("Failed to create shift change request.");
     }
   };
-  
+  const handleOvertimeSubmit=async(data:OvertimeFormData)=>{
+    console.log(data);
+  }
   const handleSubmit = () => {
     switch (tab) {
       case "leave":
@@ -76,8 +81,10 @@ export default function CreateRequestDialog({ open, onOpenChange }: Props) {
         break;
 
       case "overtime":
-        console.log("Submit OT");
-        break;
+         case "overtime":
+          overtimeFormRef.current?.submit();
+      break;
+
     }
   };
    
@@ -135,7 +142,7 @@ export default function CreateRequestDialog({ open, onOpenChange }: Props) {
             {tab === "shift" && <ShiftChangeRequestForm ref={shiftFormRef}
                 onSubmit={handleChangeShiftSubmit}/>}
 
-            {tab === "overtime" && <OvertimeRequestForm />}
+            {tab === "overtime" && <OvertimeRequestForm  ref={overtimeFormRef} onSubmit={handleOvertimeSubmit}/>}
           </ScrollArea>
         </div>
 
@@ -148,7 +155,9 @@ export default function CreateRequestDialog({ open, onOpenChange }: Props) {
             onSubmit={handleSubmit}
           />
         </div>
+         {loading&&<Loading fullScreen={true}/>}
       </DialogContent>
+     
     </Dialog>
   );
 }

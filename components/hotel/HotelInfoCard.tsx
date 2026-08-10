@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Clock3, Mail, MapPin, Pencil, Phone, ScrollText } from "lucide-react";
-import { hotelService } from "@/services/hotel.service";
 import toast from "react-hot-toast";
-import { Hotel } from "@/types/hotel";
+import { Hotel } from "@/app/admin/(manager)/manager/hotels/type";
+import { hotelService } from "@/app/admin/(manager)/manager/hotels/hotel.service";
 
 interface Props {
   hotel:Hotel,

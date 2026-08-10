@@ -1,56 +1,45 @@
 import api from "@/lib/axios";
-import {
-    Shift,
-    ShiftResponse,
-    ApiResponse,
-} from "@/types/shift";
+import { ApiResponse } from "@/types/api";
 
-export interface CreateShiftRequest {
-    hotelId: number;
-    name: string;
-    startTime: string;
-    endTime: string;
+export interface ShiftResponse {
+  id: number;
+  name: string;
+  startTime: string;
+  endTime: string;
+  breakMinutes: number;
+  status: boolean;
 }
 
-// Lấy danh sách ca làm
-export const getShifts = async () => {
-    const response = await api.get<ShiftResponse>(
-        "/shifts"
-    );
+export interface CreateShiftRequest {
+  name: string;
+  startTime: string;
+  endTime: string;
+  breakMinutes: number;
+  status: boolean;
+}
 
-    return response.data;
-};
+export interface UpdateShiftRequest {
+  name: string;
+  startTime: string;
+  endTime: string;
+  breakMinutes: number;
+  status: boolean;
+}
 
-// Tạo ca làm
-export const createShift = async (
-    data: CreateShiftRequest
-) => {
-    const response = await api.post<
-        ApiResponse<Shift>
-    >("/shifts", data);
+export const shiftService = {
+  getAll() {
+    return api.get<ApiResponse<ShiftResponse[]>>("/shifts");
+  },
 
-    return response.data;
-};
+  create(data: CreateShiftRequest) {
+    return api.post<ApiResponse<ShiftResponse>>("/shifts", data);
+  },
 
-export const updateShift = async (
-    id: number,
-    data: CreateShiftRequest
-) => {
-    const response = await api.put<
-        ApiResponse<Shift>
-    >(`/shifts/${id}`, data);
+  update(id: number, data: UpdateShiftRequest) {
+    return api.put<ApiResponse<ShiftResponse>>(`/shifts/${id}`, data);
+  },
 
-    return response.data;
-};
-
-// ========================
-// DELETE
-// DELETE /api/shifts/{id}
-// ========================
-export const deleteShift = async (id: number) => {
-    const response = await api.delete<
-        ApiResponse<null>
-    >(`/shifts/${id}`);
-
-    return response.data;
+  delete(id: number) {
+    return api.delete<ApiResponse<void>>(`/shifts/${id}`);
+  },
 };
