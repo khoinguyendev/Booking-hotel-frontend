@@ -46,7 +46,7 @@ export default function RequestStatusBadge({
 
 function getConfig(status: RequestStatus) {
   switch (status) {
-    case 'Pending':
+    case 1:
       return {
         label: 'Chờ duyệt',
         icon: Clock3,
@@ -61,7 +61,7 @@ function getConfig(status: RequestStatus) {
         `,
       };
 
-    case 'Approved':
+    case 2:
       return {
         label: 'Đã duyệt',
         icon: CheckCircle2,
@@ -76,7 +76,7 @@ function getConfig(status: RequestStatus) {
         `,
       };
 
-    case 'Rejected':
+    case 3:
       return {
         label: 'Từ chối',
         icon: XCircle,

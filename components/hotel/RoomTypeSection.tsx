@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { ArrowRight, BedDouble, Pencil } from 'lucide-react';
-import { RoomType } from '@/types/hotel';
+import { RoomType } from '@/app/admin/(manager)/manager/hotels/type';
 
 
 
@@ -36,7 +36,7 @@ export default function RoomTypeSection({ roomTypes }: Props) {
         </div>
 
         <Link
-          href="/admin/room-types"
+          href="/admin/manager/room-types"
           className="
             inline-flex
             items-center
@@ -159,7 +159,7 @@ export default function RoomTypeSection({ roomTypes }: Props) {
               </span>
 
               <Link
-                href={`/admin/room-types/${room.id}`}
+                href={`/admin/manager/room-types/${room.id}`}
                 className="
                   text-sm
                   font-semibold

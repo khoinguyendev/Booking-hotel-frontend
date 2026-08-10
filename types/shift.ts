@@ -3,15 +3,12 @@ export interface Shift {
   name: string;
   startTime: string;
   endTime: string;
+  breakMinutes: number;
+  status: boolean;
 }
 
 
-export interface Shift {
-    id: number;
-    name: string;
-    startTime: string;
-    endTime: string;
-}
+
 
 export interface ApiResponse<T> {
     success: boolean;

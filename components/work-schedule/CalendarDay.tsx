@@ -1,7 +1,6 @@
 "use client";
 
 import { Coffee, Plus, Sunrise, Sunset, MoonStar } from "lucide-react";
-import { WorkScheduleResponse } from "./WorkCalendar";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import {
@@ -16,6 +15,7 @@ import { Shift } from "@/types/shift";
 import { useParams, useSearchParams } from "next/navigation";
 import { workService } from "@/services/work.service";
 import toast from "react-hot-toast";
+import { WorkScheduleResponse } from "@/types/workSchedule";
 
 interface Props {
   date: Date;
@@ -35,12 +35,10 @@ export default function CalendarDay({
     return <div className="aspect-square" />;
   }
   const searchParams = useSearchParams();
-
   const id = searchParams.get("employeeId");
   const [open, setOpen] = useState(false);
   const [selectedShiftId, setSelectedShiftId] = useState<number>();
   const today = startOfDay(new Date());
-
   const isToday =
     today.getDate() === date.getDate() &&
     today.getMonth() === date.getMonth() &&
@@ -51,8 +49,6 @@ export default function CalendarDay({
   const isPastDate = isBefore(startOfDay(date), today);
 
   const handleOpen = () => {
-    
-
     setOpen(true);
   };
   const style = getStyle(schedule);
@@ -64,17 +60,19 @@ export default function CalendarDay({
         hotelStaffId: id,
         isDayOff: false,
       };
+      console.log("Payload for creating work schedule:", payload); // Debug: In ra payload để kiểm tra
       await workService.createWork(payload);
       toast.success("Work schedule created successfully!");
       setOpen(false);
-    } catch (error) {
-      console.error("Error creating work schedule:", error);
+    } catch (error: any) {
+      console.log(error.response?.data);
     }
   };
   return (
     <>
       <button
-      disabled={isPastDate || hasSchedule}
+        // disabled={isPastDate || hasSchedule}
+        disabled={true}
         onClick={handleOpen}
         className={`
         relative
@@ -167,14 +165,12 @@ export default function CalendarDay({
 
           {schedule?.isDayOff && (
             <div className="flex flex-1 flex-col items-center justify-center">
-              <Plus size={18} />
+              {/* <Plus size={18} /> */}
               <Coffee size={22} className="text-gray-500" />
 
               <p className="mt-2 text-xs font-semibold text-gray-700 dark:text-gray-300">
-                Ngày nghỉ
+                Được nghỉ
               </p>
-
-              <p className="mt-1 text-[10px] text-gray-400">Không có ca làm</p>
             </div>
           )}
 
@@ -219,7 +215,7 @@ export default function CalendarDay({
                 className={`w-full rounded-xl border p-4 text-left transition
             ${
               selectedShiftId === shift.id
-                ? "border-[#007AFF] bg-blue-50"
+                ? "border-[#007AFF]"
                 : "border-[#E5E5EA]"
             }
           `}

@@ -1,5 +1,6 @@
 'use client';
 
+import { Amenitie } from '@/types/amenitie';
 import {
   Pencil,
   Plus,
@@ -14,7 +15,7 @@ import {
 } from 'lucide-react';
 
 interface Props {
-  amenities: string[];
+  amenities: Amenitie[];
 }
 
 const getAmenityIcon = (name: string) => {
@@ -47,6 +48,7 @@ const getAmenityIcon = (name: string) => {
 export default function AmenitySection({
   amenities,
 }: Props) {
+  console.log('amenities', amenities);
   return (
     <section className="rounded-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm">
 
@@ -123,7 +125,7 @@ export default function AmenitySection({
           {amenities.map((amenity) => (
 
             <div
-              key={amenity}
+              key={amenity.id}
               className="
                 group
                 flex
@@ -154,13 +156,13 @@ export default function AmenitySection({
                   transition
                 "
               >
-                {getAmenityIcon(amenity)}
+                {getAmenityIcon(amenity.name)}
               </div>
 
               <div className="flex-1">
 
                 <p className="font-semibold text-sm">
-                  {amenity}
+                  {amenity.name}
                 </p>
 
                 <p className="text-xs text-zinc-500 mt-1">

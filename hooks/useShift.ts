@@ -1,60 +1,56 @@
-// hooks/useShift.ts
+"use client";
 
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-
 import {
-    getShifts, deleteShift,
-    updateShift,
-    CreateShiftRequest,
+  CreateShiftRequest,
+  ShiftResponse,
+  shiftService,
+  UpdateShiftRequest,
 } from "@/services/shift.service";
-import { Shift } from "@/types/shift";
 
-export const useShift = () => {
-    const [shifts, setShifts] = useState<Shift[]>([]);
-    const [loading, setLoading] = useState(true);
+export function useShifts() {
+  const [shifts, setShifts] = useState<ShiftResponse[]>([]);
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        fetchShifts();
-    }, []);
+  const fetchShifts = async () => {
+    setLoading(true);
 
-    const fetchShifts = async () => {
-        try {
-            setLoading(true);
+    try {
+      const res = await shiftService.getAll();
+      setShifts(res.data.data);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            const res = await getShifts();
+  useEffect(() => {
+    fetchShifts();
+  }, []);
 
-            setShifts(res.data);
-        } catch {
-            toast.error("Không tải được danh sách ca làm");
-        } finally {
-            setLoading(false);
-        }
-    };
-    const editShift = async (
-        id: number,
-        data: CreateShiftRequest
-    ) => {
-        await updateShift(id, data);
-        await fetchShifts();
-    };
+  const create = async (data: CreateShiftRequest) => {
+    await shiftService.create(data);
+    await fetchShifts();
+  };
 
-    const removeShift = async (id: number) => {
-        try {
-            await deleteShift(id);
+  const update = async (
+    id: number,
+    data: UpdateShiftRequest
+  ) => {
+    await shiftService.update(id, data);
+    await fetchShifts();
+  };
 
-            toast.success("Đã xóa ca làm");
+  const remove = async (id: number) => {
+    await shiftService.delete(id);
+    await fetchShifts();
+  };
 
-            await fetchShifts();
-        } catch {
-            toast.error("Xóa thất bại");
-        }
-    };
-    return {
-        shifts,
-        loading,
-        fetchShifts,
-        editShift,
-        removeShift,
-    };
-};
+  return {
+    shifts,
+    loading,
+    create,
+    update,
+    remove,
+    refresh: fetchShifts,
+  };
+}

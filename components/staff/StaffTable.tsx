@@ -15,7 +15,7 @@ export const StaffTable = ({ records }: AttendanceTableProps) => {
     //router.push('/quan-ly/cham-cong/phan-ca');
 
     // Mẹo nhỏ: Nếu sau này bạn muốn lọc thẳng ca của riêng nhân viên đó, bạn có thể truyền thêm query parameter:
-    router.push(`/quan-ly/nhan-su/${row.userId}?employeeId=${row.id}`);
+    router.push(`/quan-ly/nhan-vien/${row.userId}?employeeId=${row.id}`);
   };
   return (
     <div className="bg-white dark:bg-[#1C1C1E] rounded-2xl border border-[#E5E5EA] dark:border-[#2C2C2E] overflow-hidden shadow-sm dark:shadow-2xl transition-all duration-300">
@@ -51,7 +51,7 @@ export const StaffTable = ({ records }: AttendanceTableProps) => {
                     <td className="p-4 pr-6 text-right">
                       <span className="inline-flex items-center space-x-1.5 text-xs font-medium">
                         <span className={`w-2 h-2 rounded-full bg-[#34C759]`} />
-                        <button onClick={()=>router.push(`/quan-ly/nhan-su/${row.id}`)} className="text-blue-500 hover:text-blue-700">
+                        <button onClick={()=>router.push(`/quan-ly/nhan-vien/${row.id}`)} className="text-blue-500 hover:text-blue-700">
                           Xem lịch
                         </button>
                       </span>

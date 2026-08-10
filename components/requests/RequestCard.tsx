@@ -9,16 +9,12 @@ import {
 } from "lucide-react";
 
 import RequestStatusBadge from "./RequestStatusBadge";
-import {
-  LeaveData,
-  OvertimeData,
-  ShiftChangeData,
-  StaffRequest,
-} from "@/types/requests";
+
 import { format, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
+import { RequestResponse } from "@/types/requests";
 interface Props {
-  request: StaffRequest;
+  request: RequestResponse;
   onClick?: () => void;
 }
 
@@ -52,7 +48,7 @@ export default function RequestCard({ request, onClick }: Props) {
     >
       {/* Thanh màu */}
 
-      <div className={`absolute left-0 top-0 h-full w-1 ${style.line}`} />
+      <div className={`absolute left-0 top-0 h-full w-1 ${style?.line}`} />
 
       {/* Header */}
 
@@ -67,15 +63,15 @@ export default function RequestCard({ request, onClick }: Props) {
               justify-center
               rounded-2xl
 
-              ${style.bg}
+              ${style?.bg}
             `}
           >
-            {style.icon}
+            {style?.icon}
           </div>
 
           <div>
             <h3 className="text-lg font-bold text-[#1C1C1E] dark:text-white">
-              {style.title}
+              {style?.title}
             </h3>
 
             <p className="mt-1 text-sm text-gray-500">{request.staffName}</p>
@@ -124,20 +120,19 @@ export default function RequestCard({ request, onClick }: Props) {
   );
 }
 
-function renderContent(request: StaffRequest) {
+function renderContent(request: RequestResponse) {
   switch (request.type) {
-    case "Leave":
-      const detail = request.detail as LeaveData;
+    case 1:
+      const detail = request.leave;
 
       return (
         <div className="flex items-center gap-3">
           <CalendarDays size={18} className="text-[#007AFF]" />
-
           <div>
             <p className="text-sm font-semibold">
-              {detail.fromDate}
+              {detail?.fromDate}
               {"  "}→{"  "}
-              {detail.toDate}
+              {detail?.toDate}
             </p>
 
             <p className="mt-1 text-xs text-gray-500">{request.reason}</p>
@@ -145,32 +140,33 @@ function renderContent(request: StaffRequest) {
         </div>
       );
 
-    case "ShiftChange":
-      const detail1 = request.detail as ShiftChangeData;
+    case 2:
+      const detail1 = request.shiftChange;
       return (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <RefreshCcw size={18} className="text-orange-500" />
+            <span className="text-sm font-semibold">
+              {detail1?.currentWorkDate
+                && `${format(parseISO(detail1?.currentWorkDate!), "dd/MM")} • `}
+              {detail1?.currentShiftName}
+            </span>
+
+            <ArrowRight size={14} className="text-gray-400" />
 
             <span className="text-sm font-semibold">
-  {format(parseISO(detail1.currentDate!), "dd/MM")} • {detail1.currentShiftName}
-        </span>
-
-        <ArrowRight size={14} className="text-gray-400" />
-
-        <span className="text-sm font-semibold">
-          {detail1.newWorkDate
-            ? `${format(parseISO(detail1.newWorkDate), "dd/MM")} • `
-            : `${format(parseISO(detail1.currentDate!), "dd/MM")} • `}
-          {detail1.newShiftName}
-        </span>
+              {detail1?.newWorkDate
+                ? `${format(parseISO(detail1?.newWorkDate), "dd/MM")} • `
+                : `${format(parseISO(detail1?.currentWorkDate!), "dd/MM")} • `}
+              {detail1?.newShiftName}
+            </span>
           </div>
           <p className="text-xs text-gray-500">{request.reason}</p>
         </div>
       );
 
-    case "Overtime":
-      const detail2 = request.detail as OvertimeData;
+    case 3:
+      const detail2 = request.overtime;
 
       return (
         <div className="flex items-center gap-3">
@@ -178,23 +174,25 @@ function renderContent(request: StaffRequest) {
 
           <div>
             <p className="text-sm font-semibold">
-              {detail2.fromTime}
+              {detail2?.fromTime}
 
               {" - "}
 
-              {detail2.toTime}
+              {detail2?.toTime}
             </p>
 
-            <p className="text-xs text-gray-500">{detail2.hours} giờ tăng ca</p>
+            <p className="text-xs text-gray-500">
+              {detail2?.hours} giờ tăng ca
+            </p>
           </div>
         </div>
       );
   }
 }
 
-function getTypeStyle(type: StaffRequest["type"]) {
+function getTypeStyle(type: number) {
   switch (type) {
-    case "Leave":
+    case 1:
       return {
         title: "Đơn xin nghỉ",
         bg: "bg-blue-100 dark:bg-blue-900/30",
@@ -202,7 +200,7 @@ function getTypeStyle(type: StaffRequest["type"]) {
         icon: <Coffee size={26} className="text-blue-600" />,
       };
 
-    case "ShiftChange":
+    case 2:
       return {
         title: "Đơn đổi ca",
         bg: "bg-orange-100 dark:bg-orange-900/30",
@@ -210,7 +208,7 @@ function getTypeStyle(type: StaffRequest["type"]) {
         icon: <RefreshCcw size={26} className="text-orange-500" />,
       };
 
-    case "Overtime":
+    case 3:
       return {
         title: "Đơn tăng ca",
         bg: "bg-green-100 dark:bg-green-900/30",

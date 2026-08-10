@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ClipboardList, FilePlus2 } from "lucide-react";
 import { mockRequests } from "@/data/mockRequests";
-import { RequestStatus, RequestType, StaffRequest } from "@/types/requests";
+import { RequestResponse, RequestStatus, RequestType } from "@/types/requests";
 import StatisticCards from "@/components/requests/StatisticCards";
 import RequestFilter from "@/components/requests/RequestFilter";
 import TimelineGroup from "@/components/requests/TimelineGroup";
@@ -12,9 +12,9 @@ import CreateRequestDialog from "@/components/requests/CreateRequestDialog";
 import { requestService } from "@/services/request.service";
 
 export default function StaffRequestsPage() {
-  const [data,setData] = useState<StaffRequest[] >([]);
+  const [data,setData] = useState<RequestResponse[] >([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
-  const [selected, setSelected] = useState<StaffRequest | null>(null);
+  const [selected, setSelected] = useState<any | null>(null);
 
   const [search, setSearch] = useState("");
 
@@ -25,7 +25,8 @@ export default function StaffRequestsPage() {
     const fetchData = async () => {
       try {
         const response = await requestService.getEmployeeRequests();
-        setData(response.data.data);
+        console.log(response.data.data)
+        setData(response.data.data.items);
       }
       catch (error) {
         console.error("Error fetching employee requests:", error);
@@ -34,21 +35,7 @@ export default function StaffRequestsPage() {
 
     fetchData();
   }, []);
-  // const filteredRequests = useMemo(() => {
-  //   return data?.filter((item) => {
-  //     const keyword = search.toLowerCase();
-
-  //     const matchSearch =
-  //       item.employeeName.toLowerCase().includes(keyword) ||
-  //       item.employeeCode.toLowerCase().includes(keyword);
-
-  //     const matchType = type === "All" || item.type === type;
-
-  //     const matchStatus = status === "All" || item.status === status;
-
-  //     return matchSearch && matchType && matchStatus;
-  //   });
-  // }, [data, search, type, status]);
+  console.log(data);
 
   return (
     <div

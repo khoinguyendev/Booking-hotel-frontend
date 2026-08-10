@@ -1,75 +1,138 @@
-export type RequestType =
-  | 'Leave'
-  | 'ShiftChange'
-  | 'Overtime';
+export enum RequestType {
+  Leave = 1,
+  ShiftChange = 2,
+  Overtime = 3,
+}
 
-export type RequestStatus =
-  | 'Pending'
-  | 'Approved'
-  | 'Rejected';
+export enum RequestStatus {
+  Pending = 1,
+  Approved = 2,
+  Rejected = 3,
+  Cancelled = 4,
+}
 
-export interface LeaveData {
+/**
+ * Leave request detail
+ */
+export interface LeaveRequestDetail {
+  id: number;
+  staffRequestId: number;
   fromDate: string;
   toDate: string;
 }
 
-export interface ShiftChangeData {
-  currentShiftName: string;
-  currentShiftId: number;
-  newShiftName: string;
-  newShiftId: number;
+/**
+ * Shift change request detail
+ */
+export interface ShiftChangeRequestDetail {
+  id: number;
+  staffRequestId: number;
   workScheduleId: number;
-  targetWorkScheduleId?: number;
-  newWorkDate?: string;
-  currentDate?: string;
+  targetWorkScheduleId: number | null;
+  newShiftId: number;
+  newShiftName: string;
+  currentShiftId: number;
+  currentShiftName: string;
+  currentWorkDate: string;
+  newWorkDate: string | null;
 }
 
-export interface OvertimeData {
+/**
+ * Overtime request detail
+ */
+export interface OvertimeRequestDetail {
+  id: number;
+  staffRequestId: number;
+
+  workScheduleId: number;
+
   workDate: string;
+
   fromTime: string;
   toTime: string;
+
   hours: number;
 }
 
-export interface StaffRequest {
+/**
+ * Request chung
+ */
+export interface RequestResponse {
   id: number;
+
+  hotelStaffId: number;
 
   employeeCode: string;
 
   staffName: string;
 
-  createdAt: string;
+  position: string;
 
   type: RequestType;
 
   status: RequestStatus;
 
-  reason: string;
+  reason?: string | null;
 
-  rejectReason?: string;
+  approvedBy?: number | null;
 
-  approvedBy?: string;
+  approvedAt?: string | null;
 
-  approvedAt?: string;
-  detail?: LeaveData | ShiftChangeData | OvertimeData;
+  rejectReason?: string | null;
 
+  createdAt: string;
+
+  updatedAt: string;
+
+  leave?: LeaveRequestDetail | null;
+
+  shiftChange?: ShiftChangeRequestDetail | null;
+
+  overtime?: OvertimeRequestDetail | null;
 }
 
-export interface LeaveRequest{
-  id: number,
-  staffRequestId: number,
-  hotelStaffId: number,
-  staffName: string,
-  fromDate: string,
-  toDate: string,
-  reason: string,
-  status: RequestStatus,
-  createdAt: string
+/**
+ * Pagination
+ */
+
+
+
+
+/**
+ * Filter
+ */
+export interface RequestFilter {
+  keyword?: string;
+
+  type?: RequestType;
+
+  status?: RequestStatus;
+
+  fromDate?: string;
+
+  toDate?: string;
+
+  page?: number;
+
+  pageSize?: number;
 }
- export interface ShiftChangeRequest {
-  workScheduleId: number;
-  targetWorkScheduleId?: number;
-  newShiftId?: number;
-  workDate: string;
-  reason: string;
+
+/**
+ * Thống kê request
+ */
+export interface RequestStatsResponse {
+  total: number;
+
+  pending: number;
+
+  approved: number;
+
+  rejected: number;
+}
+export interface ShiftChangeRequest{
+  workScheduleId:number;
+  targetWorkScheduleId?:number;
+  newShiftId :number
+   newWorkDate :string;
+    reason :string;
 }

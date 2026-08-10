@@ -11,7 +11,10 @@ export interface LoginResponse {
             avatar: string;
             fullName: string;
             email: string;
-            role: string;
+            role: number;
+            roleName:string
+            hotelStaffId:number,
+            hotelId:number,
         }
     }
     code: string;
@@ -20,7 +23,12 @@ export interface LoginResponse {
     success: boolean;
 
 }
-
+export enum Role {
+  Customer = 1,
+  Staff = 2,
+  Manager = 3,
+  Admin = 4,
+}
 export interface RegisterRequest {
     email: string;
     password: string;
