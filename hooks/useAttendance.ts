@@ -6,9 +6,7 @@ import { usePagination } from "./usePayroll";
 import {
   AttendanceRecord,
   AttendanceStatsResponse,
-  AttendanceStatus,
   CalendarAttendanceResponse,
-
 } from "@/types/attendance";
 
 interface Props {
@@ -18,12 +16,7 @@ interface Props {
   search?: string;
 }
 
-export function useAttendance({
-  date,
-  positionId,
-  shiftId,
-  search,
-}: Props) {
+export function useAttendance({ date, positionId, shiftId, search }: Props) {
   const [loading, setLoading] = useState(false);
 
   const [attendanceRecords, setAttendanceRecords] = useState<
@@ -39,12 +32,7 @@ export function useAttendance({
 
   const pagination = usePagination();
 
-  const {
-    page,
-    pageSize,
-    setTotalItems,
-    setTotalPages,
-  } = pagination;
+  const { page, pageSize, setTotalItems, setTotalPages } = pagination;
 
   // =========================
   // Attendance records
@@ -55,13 +43,11 @@ export function useAttendance({
       setLoading(true);
 
       const res = await attendanceService.getAttendanceByDate({
-        workDate:date,
+        workDate: date,
         page,
         pageSize,
-        positionId:
-          positionId && positionId > 0 ? positionId : undefined,
-        shiftId:
-          shiftId && shiftId > 0 ? shiftId : undefined,
+        positionId: positionId && positionId > 0 ? positionId : undefined,
+        shiftId: shiftId && shiftId > 0 ? shiftId : undefined,
         search: search?.trim() || undefined,
       });
 
@@ -106,8 +92,7 @@ export function useAttendance({
 
   const fetchCalendarAttendance = useCallback(async () => {
     try {
-      const res =
-        await attendanceService.getCalendarAttendance();
+      const res = await attendanceService.getCalendarAttendance();
 
       setCalendarAttendance(res.data.data);
     } catch (err) {
@@ -130,10 +115,7 @@ export function useAttendance({
   useEffect(() => {
     fetchAttendanceStats();
     fetchCalendarAttendance();
-  }, [
-    fetchAttendanceStats,
-    fetchCalendarAttendance,
-  ]);
+  }, [fetchAttendanceStats, fetchCalendarAttendance]);
 
   return {
     attendanceRecords,

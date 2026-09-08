@@ -26,7 +26,6 @@ export default function AttendanceTable({
   onView,
   onEdit,
 }: Props) {
-
   return (
     <div
       className="
@@ -51,9 +50,9 @@ export default function AttendanceTable({
           <tbody>
             {loading && <AttendanceSkeleton />}
 
-            {!loading &&
-              records.map((item) => {
-                if (item.id > 0)
+            {
+              !loading&&records.map((item) => {
+               
                   return (
                     <AttendanceTableRow
                       key={item.id}

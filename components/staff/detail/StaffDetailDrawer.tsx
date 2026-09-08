@@ -16,7 +16,7 @@ import { staffService } from "@/services/staft.service";
 import { getMonth, getYear } from "date-fns";
 import { useRouter } from "next/navigation";
 import StaffSchedule from "./StaffSchedule";
-import { WorkScheduleResponse } from "@/components/work-schedule/WorkCalendar";
+import { WorkScheduleResponse } from "@/components/work-schedule/shared/WorkCalendar";
 
 interface Props {
   open: boolean;

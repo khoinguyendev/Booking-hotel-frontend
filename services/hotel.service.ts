@@ -1,40 +1,104 @@
 import api from "@/lib/axios";
-import {
-  Hotel,
-  HotelResponse,
-  ApiResponse,
-  CreateHotelRequest,
-} from "@/types/hotel";
+import { Amenitie } from "@/types/amenitie";
+import { ApiResponse } from "@/types/api";
+import { HotelSearchParams, HotelSearchResponse, UpdateHotelRequest } from "@/types/hotel";
 
-// GET
-export const getHotels = async () => {
-  const response = await api.get<HotelResponse>("/hotels");
-
-  return response.data;
+export const hotelService = {
+  getHotelByManager() {
+    return api.get<ApiResponse<Hotel>>("/hotels/manager");
+  },
+  updateHotelByManager(data: UpdateHotelRequest) {
+    return api.put<ApiResponse<any>>("/hotels", data);
+  },
+  search(data: HotelSearchParams) {
+    return api.get<ApiResponse<HotelSearchResponse[]>>(
+      "/hotels/search",
+      {
+        params: data,
+      }
+    );
+  },
 };
 
-// CREATE
-export const createHotel = async (data: CreateHotelRequest) => {
-  const response = await api.post<ApiResponse<Hotel>>("/hotels", data);
+export interface Hotel {
+  id: number;
+  brandId: number;
+  brandName: string;
 
-  return response.data;
-};
+  city: string;
+  name: string;
+  slug: string;
 
-// UPDATE
-export const updateHotel = async (id: number, data: CreateHotelRequest) => {
-  const response = await api.put<ApiResponse<Hotel>>(`/hotels/${id}`, data);
+  image: string;
+  banner: string;
 
-  return response.data;
-};
+  description: string;
+  address: string;
 
-// DELETE
-export const deleteHotel = async (id: number) => {
-  const response = await api.delete<ApiResponse<null>>(`/hotels/${id}`);
+  latitude: number;
+  longitude: number;
 
-  return response.data;
-};
-export const getHotelById = async (id: number) => {
-  const response = await api.get<ApiResponse<Hotel>>(`/hotels/${id}`);
+  phone: string;
+  email: string;
 
-  return response.data;
-};
+  star: number;
+
+  checkinTime: string;
+  checkoutTime: string;
+
+  status: boolean;
+
+  roomTypeCount: number;
+  roomCount: number;
+  amenityCount: number;
+  surchargeCount: number;
+
+  amenities: Amenitie[];
+  surcharges: HotelSurcharge[];
+  roomTypes: RoomType[];
+
+  createdAt: string;
+  updatedAt: string | null;
+}
+
+export interface RoomType {
+  id: number;
+  hotelId: number;
+
+  name: string;
+  maxGuest: number;
+  basePrice: number;
+
+  bedType: string;
+  roomSize: number;
+
+  description: string;
+
+  // Backend hiện trả về chuỗi URL, ngăn cách bằng dấu ,
+  images: string;
+
+  roomCount: number;
+}
+
+export interface HotelSurcharge {
+  id: number;
+  hotelId: number;
+
+  name: string;
+  description: string;
+
+  chargeType: ChargeType;
+  applyType: ApplyType;
+
+  amount: number;
+
+  isRequired: boolean;
+  isActive: boolean;
+
+  createdAt: string;
+  updatedAt: string | null;
+}
+
+export type ChargeType = "Fixed" | "Percentage";
+
+export type ApplyType = "Booking" | "Room" | "Night" | "Guest";

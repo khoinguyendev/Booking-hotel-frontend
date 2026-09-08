@@ -1,7 +1,6 @@
 "use client";
 
 import { X, ArrowRight, CalendarDays, Clock3 } from "lucide-react";
-import { toast } from "sonner";
 
 interface NotificationToastProps {
   onClose: () => void;

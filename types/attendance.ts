@@ -1,4 +1,5 @@
 import { OvertimeResponse } from "@/services/overtimeService.service";
+import { AttendanceStatus } from "./dashboardstaff";
 
 export interface Shift {
   id: number;
@@ -83,3 +84,39 @@ export const ATTENDANCES_TYPE_LABEL: Record<AttendanceType, string> = {
   [AttendanceType.Late]: "Đi muộn",
   [AttendanceType.Leave]: "Nghỉ có phép",
 };
+
+
+export interface AttendanceHistoryResponse {
+  id: number;
+
+  workScheduleId: number;
+
+  workDate: string;
+
+  shiftId: number | null;
+
+  shiftName: string | null;
+
+  shiftStartTime: string | null;
+
+  shiftEndTime: string | null;
+
+  startTimeOt: string | null;
+
+  endTimeOt: string | null;
+
+  checkInTime: string | null;
+
+  checkOutTime: string | null;
+
+  status: AttendanceType;
+
+  lateMinutes: number;
+
+  earlyLeaveMinutes: number;
+
+  penaltyAmount: number;
+
+  note: string | null;
+}
+

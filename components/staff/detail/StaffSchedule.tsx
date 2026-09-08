@@ -1,6 +1,6 @@
 'use client';
 
-import { WorkScheduleResponse } from '@/components/work-schedule/WorkCalendar';
+import { WorkScheduleResponse } from '@/components/work-schedule/shared/WorkCalendar';
 import {
   Coffee,
   Sunrise,

@@ -6,22 +6,23 @@ import {
 } from '@/components/ui/table';
 
 
-import { SalaryItem } from '@/types/salary';
 import SalaryTableHeader from './SalaryTableHeader';
 import SalarySkeleton from './SalarySkeleton';
 import SalaryEmpty from './SalaryEmpty';
 import SalaryTableRow from './SalaryTableRow';
+import { SalaryResponseItem } from '@/types/salary';
 
 interface Props {
-  salaries: SalaryItem[];
+  salaries: SalaryResponseItem[];
 
   loading?: boolean;
 
-  onView?: (salary: SalaryItem) => void;
+  onView?: (salary: SalaryResponseItem) => void;
 
-  onEdit?: (salary: SalaryItem) => void;
+  onEdit?: (salary: SalaryResponseItem) => void;
+  onCaculate?: (salary: SalaryResponseItem) => void;
 
-  onPay?: (salary: SalaryItem) => void;
+  onPay?: (salary: SalaryResponseItem) => void;
 }
 
 export default function SalaryTable({
@@ -29,6 +30,7 @@ export default function SalaryTable({
   loading = false,
   onView,
   onEdit,
+  onCaculate,
   onPay,
 }: Props) {
   return (
@@ -62,6 +64,7 @@ export default function SalaryTable({
                   key={salary.id}
                   salary={salary}
                   onView={onView}
+                  onCaculate={onCaculate}
                   onEdit={onEdit}
                   onPay={onPay}
                 />

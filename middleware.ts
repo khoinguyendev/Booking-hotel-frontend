@@ -1,48 +1,53 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-    const { pathname } = request.nextUrl;
+  const { pathname } = request.nextUrl;
 
-    const token = request.cookies.get("accessToken")?.value;
-    const role = request.cookies.get("role")?.value;
+  const token = request.cookies.get("accessToken")?.value;
+  const role = request.cookies.get("role")?.value;
 
-    // Nếu đã đăng nhập thì không cho vào Login/Register
-    if (
-        pathname === "/quan-ly/dang-nhap" ||
-        pathname === "/quan-ly/dang-ky"
-    ) {
-        if (token && role !== "Customer") {
-            return NextResponse.redirect(
-                new URL("/quan-ly/trang-chu", request.url)
-                // hoặc "/admin/dashboard"
-            );
-        }
+  const isAuthPage =
+    pathname === "/dang-nhap" ||
+    pathname === "/dang-ky";
 
-        return NextResponse.next();
-    }
+  const isProtectedPage =
+    pathname.startsWith("/quan-ly");
 
-    // Bảo vệ các trang admin
-    if (pathname.startsWith("/quan-ly")) {
-        if (!token) {
-            return NextResponse.redirect(
-                new URL("/quan-ly/dang-nhap", request.url)
-            );
-        }
-
-        if (role === "Customer") {
-            return NextResponse.redirect(
-                new URL("/403", request.url)
-            );
-        }
+  // Đã đăng nhập → không cho vào login/register
+  if (isAuthPage) {
+    if (token && role && role !== "Customer") {
+      return NextResponse.redirect(
+        new URL("/quan-ly/khach-san", request.url)
+      );
     }
 
     return NextResponse.next();
+  }
+
+  // Bảo vệ các trang quản lý
+  if (isProtectedPage) {
+    if (!token) {
+      return NextResponse.redirect(
+        new URL("/dang-nhap", request.url)
+      );
+    }
+
+    if (role === "Customer") {
+      return NextResponse.redirect(
+        new URL("/403", request.url)
+      );
+    }
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-    matcher: [
-        "/quan-ly/dang-nhap",
-        "/quan-ly/dang-ky",
-        "/quan-ly/:path*",
-    ],
+  matcher: [
+    "/dang-nhap",
+    "/dang-ky",
+    "/quan-ly/:path*",
+    "/admin/:path*",
+    "/nhan-vien/:path*",
+  ],
 };

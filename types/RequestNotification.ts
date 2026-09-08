@@ -28,3 +28,23 @@ requestId:number;
   // Sau này overtime thêm field ở đây
   [key: string]: unknown;
 }
+
+export interface PaymentNotification {
+  bookingId: number;
+  bookingCode: string;
+
+  paymentId: number;
+  amount: number;
+
+  guestName: string;
+
+  paymentMethod: string;
+  paymentStatus: string;
+
+  bookingStatus: string;
+
+  paidAmount: number;
+  remainingAmount: number;
+
+  paidAt: string | null;
+}

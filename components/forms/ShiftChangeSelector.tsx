@@ -6,19 +6,12 @@ import { ArrowRight, CalendarDays, Check, Clock3, Repeat2 } from "lucide-react";
 import { format, isSameDay, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
-import { Calendar } from "@/components/ui/calendar";
 
 import { Shift } from "@/types/shift";
 import { WorkScheduleResponse } from "@/types/workSchedule";
 
-import { NewWorkDatePicker } from "../requests/NewWorkDatePicker";
+import { NewWorkDatePicker } from "../requests/employee/NewWorkDatePicker";
 
 interface Props {
   currentSchedule: WorkScheduleResponse;

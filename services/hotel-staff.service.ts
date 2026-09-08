@@ -26,7 +26,11 @@ export const hotelStaffService = {
       `/hotel-staffs/${id}`
     );
   },
-
+  getByEmployeeCode(code: string) {
+    return api.get<ApiResponse<any>>(
+      `/hotel-staffs/by-code/${code}`
+    );
+  },
   // Thêm nhân viên
   create(data: CreateHotelStaffRequest) {
     return api.post<ApiResponse<null>>(
