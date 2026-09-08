@@ -31,7 +31,7 @@ export function useAuth() {
 
       toast.success(res.data.message);
 
-      router.push("/quan-ly/khach-san");
+      router.replace("/quan-ly/khach-san");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Đăng nhập thất bại.");
     }
@@ -57,7 +57,7 @@ export function useAuth() {
       otp,
     });
 
-    router.push("/quan-ly/dang-nhap");
+    router.push("/dang-nhap");
   }
   async function resendEmail(email: string) {
     await authService.resendEmail({

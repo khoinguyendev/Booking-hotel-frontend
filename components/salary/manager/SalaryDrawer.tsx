@@ -23,16 +23,16 @@ import { Badge } from "@/components/ui/badge";
 
 import { Button } from "@/components/ui/button";
 
-import { SalaryItem } from "@/types/salary";
 import SalaryBreakdown from "./SalaryBreakdown";
 import SalaryHistory from "./SalaryHistory";
+import { SalaryResponseItem } from "@/types/salary";
 
 interface Props {
   open: boolean;
 
   onOpenChange: (open: boolean) => void;
 
-  salary?: SalaryItem;
+  salary?: SalaryResponseItem|null;
 
   onEdit?: () => void;
 
@@ -62,13 +62,13 @@ export default function SalaryDrawer({
 
           <div className="flex items-center gap-4 rounded-2xl border p-4">
             <Avatar className="h-16 w-16">
-              <AvatarImage src={salary.avatar} />
+              <AvatarImage src={salary.avatar??""} />
 
-              <AvatarFallback>{salary.employeeName[0]}</AvatarFallback>
+              <AvatarFallback>{salary.fullName[0]}</AvatarFallback>
             </Avatar>
 
             <div className="flex-1">
-              <h2 className="text-lg font-semibold">{salary.employeeName}</h2>
+              <h2 className="text-lg font-semibold">{salary.fullName}</h2>
 
               <p className="text-sm text-muted-foreground">
                 {salary.employeeCode}
@@ -99,11 +99,11 @@ export default function SalaryDrawer({
               value={`${salary.overtimeHours} giờ`}
             />
 
-            <InfoRow
+            {/* <InfoRow
               icon={<Banknote size={18} />}
               label="Thực nhận"
-              value={formatCurrency(salary.totalSalary)}
-            />
+              value={formatCurrency(salary.shiftSalary)}
+            /> */}
           </div>
 
           {/* Breakdown */}
@@ -112,7 +112,7 @@ export default function SalaryDrawer({
 
           {/* History */}
 
-          <SalaryHistory employeeId={salary.employeeId} />
+          <SalaryHistory employeeId={salary.hotelStaffId} />
 
           {/* Footer */}
 
@@ -122,7 +122,7 @@ export default function SalaryDrawer({
               Chỉnh sửa
             </Button>
 
-            {salary.status !== "paid" && (
+            {salary.status !== 4 && (
               <Button className="flex-1" onClick={onPay}>
                 <Wallet className="mr-2 h-4 w-4" />
                 Thanh toán

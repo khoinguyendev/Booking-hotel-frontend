@@ -1,7 +1,11 @@
 import api from "@/lib/axios";
 import { ApiResponse } from "@/types/api";
 import { PaginatedResponse } from "@/types/pagination";
-import { RequestFilter, RequestResponse } from "@/types/requests";
+import {
+  OvertimeRequest,
+  RequestFilter,
+  RequestResponse,
+} from "@/types/requests";
 
 export const requestService = {
   getByManager(params?: RequestFilter) {
@@ -35,10 +39,18 @@ export const requestService = {
   createShiftChangeRequest(payload: any) {
     return api.post<ApiResponse<any>>("/shift-change-requests", payload);
   },
-  approveLeaveRequest(id:number){
-     return api.put<ApiResponse<any>>(`/leave-requests/${id}/approve`);
+  createOvertimeRequest(payload: OvertimeRequest) {
+    return api.post<ApiResponse<any>>("/overtime-requests", payload);
   },
-   approveShiftRequest(id:number){
-     return api.put<ApiResponse<any>>(`/shift-change-requests/${id}/approve`);
-  }
+  approveLeaveRequest(id: number) {
+    return api.put<ApiResponse<any>>(`/leave-requests/${id}/approve`);
+  },
+  approveShiftRequest(id: number) {
+    return api.put<ApiResponse<any>>(`/shift-change-requests/${id}/approve`);
+  },
+  approveOvertimeRequest(id: number, policyId: number) {
+    return api.put<ApiResponse<any>>(`/overtime-requests/${id}/approve`, {
+      policyId,
+    });
+  },
 };

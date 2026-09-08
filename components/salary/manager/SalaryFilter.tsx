@@ -16,29 +16,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Position } from '@/types/position';
+import { PositionResponse } from '@/services/position.service';
 
-interface Option {
-  value: string;
-  label: string;
-}
 
 interface Props {
   search: string;
   onSearchChange: (value: string) => void;
 
-  month: string;
-  onMonthChange: (value: string) => void;
+  month: number;
+  onMonthChange: (value: number) => void;
 
-  year: string;
-  onYearChange: (value: string) => void;
+  year: number;
+  onYearChange: (value: number) => void;
 
-  position: string;
-  onPositionChange: (value: string) => void;
+  position: number;
+  onPositionChange: (value: number) => void;
 
-  status: string;
-  onStatusChange: (value: string) => void;
+  status: number;
+  onStatusChange: (value: number) => void;
 
-  positions: Option[];
+  positions: PositionResponse[];
 
   onRefresh?: () => void;
 }
@@ -103,7 +101,7 @@ export default function SalaryFilter({
 
         <Select
           value={month}
-          onValueChange={()=>onMonthChange}
+          onValueChange={(value)=>onMonthChange(Number(value))}
         >
           <SelectTrigger>
 
@@ -132,7 +130,7 @@ export default function SalaryFilter({
 
         <Select
           value={year}
-          onValueChange={()=>onYearChange}
+          onValueChange={(value)=>onYearChange(Number(value))}
         >
           <SelectTrigger>
 
@@ -179,10 +177,10 @@ export default function SalaryFilter({
 
             {positions.map((item) => (
               <SelectItem
-                key={item.value}
-                value={item.value}
+                key={item.id}
+                value={item.id}
               >
-                {item.label}
+                {item.name}
               </SelectItem>
             ))}
 

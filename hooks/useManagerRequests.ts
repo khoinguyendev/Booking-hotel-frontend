@@ -70,7 +70,7 @@ export function useManagerRequests({
   ]);
   const approveRequest = async (
     record: RequestResponse,
-    approveFn: (id: number) => Promise<unknown>,
+    approveFn: (id: number) => Promise<any>,
     successMessage: string,
   ) => {
     try {
@@ -81,8 +81,9 @@ export function useManagerRequests({
       toast.success(successMessage);
 
       await fetchData();
-    } catch (err) {
+    } catch (err:any) {
       toast.error("Duyệt đơn thất bại");
+      console.log(err?.response?.data.message)
       throw err;
     } finally {
       setApprovingId(null);
@@ -94,17 +95,25 @@ export function useManagerRequests({
   const approveLeaveRequest = (record: RequestResponse) =>
     approveRequest(
       record,
-      requestService.approveLeaveRequest,
+      (id) => requestService.approveLeaveRequest(id),
       "Đã duyệt đơn nghỉ phép",
     );
 
   const approveShiftRequest = (record: RequestResponse) =>
     approveRequest(
       record,
-      requestService.approveShiftRequest,
+      (id) => requestService.approveShiftRequest(id),
       "Đã duyệt đơn đổi ca",
     );
+
+  const approveOvertimeRequest = (record: RequestResponse, policyId: number) =>
+    approveRequest(
+      record,
+      (id) => requestService.approveOvertimeRequest(id, policyId),
+      "Đã duyệt đơn tăng ca",
+    );
   return {
+    approveOvertimeRequest,
     requests,
     approveLeaveRequest,
     approvingId,

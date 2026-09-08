@@ -11,131 +11,118 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "plus.unsplash.com",
+      },
     ],
   },
   async rewrites() {
     return [
       {
-        source: "/quan-ly/dang-nhap",
-        destination: "/admin/login",
+        source: "/",
+        destination: "/customer",
       },
       {
-        source: "/quan-ly/dang-ky",
-        destination: "/admin/register",
+        source: "/khach-san",
+        destination: "/customer/hotel",
       },
       {
-        source: "/admin/quan-ly/dat-phong",
+        source: "/khach-san/:slug",
+        destination: "/customer/hotel/:slug",
+      },
+      {
+        source: "/booking/:token",
+        destination: "/customer/booking/:token",
+      },
+      {
+        source: "/booking/manage/:token",
+        destination: "/customer/booking/manage/:token",
+      },
+      {
+        source: "/payment/success",
+        destination: "/customer/payment/success",
+      },
+      {
+        source: "/dang-nhap",
+        destination: "/login",
+      },
+      {
+        source: "/dang-ky",
+        destination: "/register",
+      },
+      {
+        source: "/quan-ly/dat-phong",
         destination: "/admin/bookings",
       },
       {
-        source: "/admin/quan-ly/trang-chu",
+        source: "/quan-ly/trang-chu",
         destination: "/admin/dashboard",
       },
       {
-        source: "/admin/quan-ly/nhan-vien",
-        destination: "/admin/users",
+        source: "/quan-ly/nhan-vien",
+        destination: "/admin/staff",
       },
       {
-        source: "/admin/quan-ly/khach-san",
+        source: "/quan-ly/khach-san",
         destination: "/admin/hotels",
       },
       {
-        source: "/admin/quan-ly/khach-san/:id",
+        source: "/quan-ly/khach-san/:id",
         destination: "/admin/hotels/[id]",
       },
       {
-        source: "/admin/quan-ly/cham-cong",
+        source: "/quan-ly/cham-cong",
         destination: "/admin/attendance",
       },
       {
-        source: "/admin/quan-ly/danh-gia",
+        source: "/quan-ly/danh-gia",
         destination: "/admin/evaluations",
       },
       {
-        source: "/admin/quan-ly/hieu-suat",
+        source: "/quan-ly/hieu-suat",
         destination: "/admin/kpi",
       },
       {
-        source: "/admin/quan-ly/luong-thuong",
+        source: "/quan-ly/luong-thuong",
         destination: "/admin/payroll",
       },
       {
-        source: "/admin/quan-ly/bao-cao",
+        source: "/quan-ly/bao-cao",
         destination: "/admin/reports",
       },
       {
-        source: "/admin/quan-ly/su-kien",
-        destination: "/admin/events",
+        source: "/quan-ly/loai-phong/:id",
+        destination: "/admin/roomtype/:id",
       },
       {
-        source: "/trang-chu/khach-san",
-        destination: "/main/hotels",
-      },
-      {
-        source: "/trang-chu/khach-san/:id",
-        destination: "/main/hotels/[id]",
-      },
-      {
-        source: "/trang-chu",
-        destination: "/main",
-      },
-
-      {
-        source: "/quan-ly/khach-san",
-        destination: "/admin/manager/hotels",
-      },
-      {
-        source: "/quan-ly/khach-san/loai-phong/:id",
-        destination: "/admin/manager/room-types/[id]",
-      },
-      {
-        source: "/quan-ly/nhan-vien",
-        destination: "/admin/manager/staff",
-      },
-      {
-        source: "/quan-ly/cham-cong",
-        destination: "/admin/manager/attendance",
-      },
-      {
-        source: "/quan-ly/luong",
-        destination: "/admin/manager/salary",
-      },
-      {
-        source: "/quan-ly/chinh-sach",
-        destination: "/admin/manager/policy",
-      },
-       {
-        source: "/quan-ly/lich-lam-viec",
-        destination: "/admin/manager/workschedule",
+        source: "/quan-ly/phong/:id",
+        destination: "/admin/room/:id",
       },
       {
         source: "/quan-ly/yeu-cau",
-        destination: "/admin/manager/request",
+        destination: "/admin/requests",
       },
       {
-        source: "/quan-ly/nhan-vien/:id/lich-lam-viec",
-        destination: "/admin/manager/staff/workschedule/:id",
+        source: "/quan-ly/lich-lam-viec",
+        destination: "/admin/workschedule",
+      },
+      {
+        source: "/quan-ly/lich-lam-viec/nhan-vien/:id",
+        destination: "/admin/workschedule/:id",
       },
 
       {
-        source: "/nhan-vien",
-        destination: "/admin/employee/dashboard",
+        source: "/quan-ly/luong",
+        destination: "/admin/salary",
       },
       {
-        source: "/nhan-vien/cham-cong",
-        destination: "/admin/employee/attendance",
+        source: "/quan-ly/tien-ich",
+        destination: "/admin/amenity",
       },
       {
-        source: "/nhan-vien/yeu-cau",
-        destination: "/admin/employee/requests",
-      },
-      {
-        source: "/nhan-vien/luong-thuong",
-        destination: "/admin/employee/salary",
-      },
-      {
-        source: "/nhan-vien/lich-lam-viec",
-        destination: "/admin/employee/workschedule",
+        source: "/quan-ly/chinh-sach",
+        destination: "/admin/policy",
       },
     ];
   },

@@ -44,7 +44,7 @@ const schema = z.object({
 
   checkOutTime: z.string(),
 
-  status: z.string(),
+  status: z.number(),
 
   note: z.string().optional(),
 });
@@ -78,7 +78,7 @@ export default function EditAttendanceDialog({
 
       checkOutTime: '',
 
-      status: 'Present',
+      status: 1,
 
       note: '',
     },

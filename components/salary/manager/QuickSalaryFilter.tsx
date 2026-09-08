@@ -3,18 +3,14 @@
 import { Calculator, CheckCircle2, CreditCard, Layers3 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { SalaryStatus } from '@/types/salary';
 
-export type SalaryQuickFilter =
-  | 'all'
-  | 'calculated'
-  | 'pending'
-  | 'paid'
-  | 'unpaid';
+
 
 interface Props {
-  value: SalaryQuickFilter;
+  value: number;
 
-  onChange: (value: SalaryQuickFilter) => void;
+  onChange: (value: number) => void;
 }
 
 export default function QuickSalaryFilter({
@@ -23,42 +19,36 @@ export default function QuickSalaryFilter({
 }: Props) {
   const items = [
     {
-      value: 'all',
+      value: 0,
       label: 'Tất cả',
       icon: Layers3,
       active:
         'bg-blue-500 text-white border-blue-500',
     },
     {
-      value: 'calculated',
-      label: 'Đã tính',
-      icon: Calculator,
-      active:
-        'bg-indigo-500 text-white border-indigo-500',
-    },
-    {
-      value: 'pending',
+      value: 1,
       label: 'Chưa tính',
       icon: CreditCard,
       active:
         'bg-orange-500 text-white border-orange-500',
     },
     {
-      value: 'paid',
+      value: 2,
+      label: 'Đã tính',
+      icon: Calculator,
+      active:
+        'bg-indigo-500 text-white border-indigo-500',
+    },
+    {
+      value: 4,
       label: 'Đã thanh toán',
       icon: CheckCircle2,
       active:
         'bg-green-500 text-white border-green-500',
     },
-    {
-      value: 'unpaid',
-      label: 'Chưa thanh toán',
-      icon: CreditCard,
-      active:
-        'bg-red-500 text-white border-red-500',
-    },
+    
   ] satisfies {
-    value: SalaryQuickFilter;
+    value: number;
     label: string;
     icon: any;
     active: string;

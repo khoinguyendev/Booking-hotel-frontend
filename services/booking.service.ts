@@ -1,94 +1,205 @@
-// services/booking.service.ts
+import api from "@/lib/axios";
 
-export enum BookingStatus {
-  Pending = 0,
-  Confirmed = 1,
-  CheckedIn = 2,
-  CheckedOut = 3,
-  Cancelled = 4
+import { Booking, BookingStatus, PaymentStatus } from "@/types/booking";
+
+import { ApiResponse } from "@/types/api";
+import { PaginatedResponse } from "@/types/pagination";
+
+/* ========================================================= */
+/* Request Types                                               */
+/* ========================================================= */
+
+export interface GetBookingsParams {
+  page?: number;
+
+  pageSize?: number;
+
+  search?: string;
+
+  status?: BookingStatus;
+
+  checkinFrom?: string;
+
+  checkinTo?: string;
+
+  paymentStatus?: PaymentStatus;
 }
-
-export enum PaymentStatus {
-  Unpaid = 0,
-  Paid = 1,
-  PartiallyPaid = 2
+export interface GetStatusParams {
+  month: number;
+  year: number;
 }
+export interface CreateBookingRequest {
+  roomTypeId: number;
 
-export interface BookingRecord {
-  id: number;
-  roomId: number;
-  roomNumber: string;
-  roomType: string;
-  customerId: number;
-  customerName: string;
-  customerEmail: string;
-  bookingCode: string;
+  customerId?: number | null;
+
+  guestName: string;
+
+  guestEmail: string;
+
+  guestPhone: string;
+
   checkin: string;
+
   checkout: string;
-  status: BookingStatus;
-  total: number;
-  paymentStatus: PaymentStatus;
+
+  roomQuantity: number;
+
+  depositAmount?: number;
 }
 
-export const getMockBookings = (): BookingRecord[] => [
-  {
-    id: 101,
-    roomId: 12,
-    roomNumber: "P.302",
-    roomType: "Deluxe Double",
-    customerId: 204,
-    customerName: "Nguyễn Văn Hải",
-    customerEmail: "hai.nguyen@gmail.com",
-    bookingCode: "BK-8291-O9",
-    checkin: "2026-07-16T14:00:00",
-    checkout: "2026-07-18T12:00:00",
-    status: BookingStatus.Confirmed,
-    total: 2400000.00, // Đảm bảo giữ nguyên số thực không làm tròn theo yêu cầu của bạn
-    paymentStatus: PaymentStatus.Paid
+export interface UpdateBookingRequest {
+  roomTypeId?: number;
+
+  guestName?: string;
+
+  guestEmail?: string;
+
+  guestPhone?: string;
+
+  checkin?: string;
+
+  checkout?: string;
+
+  roomQuantity?: number;
+}
+
+export interface CancelBookingRequest {
+  reason?: string;
+}
+
+/* ========================================================= */
+/* Response Types                                              */
+/* ========================================================= */
+
+export interface BookingStatsData {
+  month: number;
+  year: number;
+  totalBookings: number;
+
+  pendingBookings: number;
+
+  confirmedBookings: number;
+
+  totalRevenue: number;
+
+  paidAmount: number;
+}
+
+/* ========================================================= */
+/* Service                                                     */
+/* ========================================================= */
+
+export const bookingService = {
+  /* ======================================================= */
+  /* Get list                                                  */
+  /* ======================================================= */
+
+  getBookings(params?: GetBookingsParams) {
+    return api.get<ApiResponse<PaginatedResponse<Booking>>>("/bookings", {
+      params,
+    });
   },
-  {
-    id: 102,
-    roomId: 5,
-    roomNumber: "P.101",
-    roomType: "Standard Single",
-    customerId: 301,
-    customerName: "Trần Thị Thu thảo",
-    customerEmail: "thao.ttt@hotmail.com",
-    bookingCode: "BK-4421-U3",
-    checkin: "2026-07-16T14:00:00",
-    checkout: "2026-07-17T12:00:00",
-    status: BookingStatus.CheckedIn,
-    total: 850000.00,
-    paymentStatus: PaymentStatus.Paid
+
+  /* ======================================================= */
+  /* Get detail                                                */
+  /* ======================================================= */
+
+  getById(id: number) {
+    return api.get<ApiResponse<Booking>>(`/bookings/${id}`);
   },
-  {
-    id: 103,
-    roomId: 24,
-    roomNumber: "P.505",
-    roomType: "VIP President Suite",
-    customerId: 112,
-    customerName: "Lê Hoàng Nam",
-    customerEmail: "namle.99@gmail.com",
-    bookingCode: "BK-0912-P9",
-    checkin: "2026-07-20T14:00:00",
-    checkout: "2026-07-25T12:00:00",
-    status: BookingStatus.Pending,
-    total: 15250000.00,
-    paymentStatus: PaymentStatus.Unpaid
+
+  /* ======================================================= */
+  /* Get by booking code                                       */
+  /* ======================================================= */
+
+  getByCode(code: string) {
+    return api.get<ApiResponse<Booking>>(`/bookings/code/${code}`);
   },
-  {
-    id: 104,
-    roomId: 8,
-    roomNumber: "P.204",
-    roomType: "Superior Twin",
-    customerId: 88,
-    customerName: "Marcus Aurelius",
-    customerEmail: "marcus.philosopher@rome.edu",
-    bookingCode: "BK-3012-X2",
-    checkin: "2026-07-14T14:00:00",
-    checkout: "2026-07-15T12:00:00",
-    status: BookingStatus.CheckedOut,
-    total: 1350000.00,
-    paymentStatus: PaymentStatus.Paid
-  }
-];
+
+  /* ======================================================= */
+  /* Create                                                    */
+  /* ======================================================= */
+
+  createBooking(data: CreateBookingRequest) {
+    return api.post<ApiResponse<Booking>>("/bookings", data);
+  },
+
+  /* ======================================================= */
+  /* Update                                                    */
+  /* ======================================================= */
+
+  updateBooking(id: number, data: UpdateBookingRequest) {
+    return api.put<ApiResponse<Booking>>(`/bookings/${id}`, data);
+  },
+
+  /* ======================================================= */
+  /* Confirm                                                   */
+  /* ======================================================= */
+
+  confirmBooking(id: number) {
+    return api.patch<ApiResponse<Booking>>(`/bookings/${id}/confirm`);
+  },
+
+  /* ======================================================= */
+  /* Check-in                                                   */
+  /* ======================================================= */
+
+  checkIn(id: number) {
+    return api.patch<ApiResponse<Booking>>(`/bookings/${id}/check-in`);
+  },
+
+  /* ======================================================= */
+  /* Check-out                                                  */
+  /* ======================================================= */
+
+  checkOut(id: number) {
+    return api.patch<ApiResponse<Booking>>(`/bookings/${id}/check-out`);
+  },
+
+  /* ======================================================= */
+  /* Cancel                                                    */
+  /* ======================================================= */
+
+  cancelBooking(id: number, data: CancelBookingRequest) {
+    return api.patch<ApiResponse<Booking>>(`/bookings/${id}/cancel`, data);
+  },
+
+  /* ======================================================= */
+  /* Stats                                                      */
+  /* ======================================================= */
+
+  getStats(params: GetStatusParams) {
+    return api.get<ApiResponse<BookingStatsData>>("/bookings/stats",{
+      params,
+    });
+  },
+
+  /* ======================================================= */
+  /* Import                                                     */
+  /* ======================================================= */
+
+  importBookings(file: File) {
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    return api.post<ApiResponse<any>>("/bookings/import", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  /* ======================================================= */
+  /* Export                                                     */
+  /* ======================================================= */
+
+  exportBookings(params?: GetBookingsParams) {
+    return api.get("/bookings/export", {
+      params,
+
+      responseType: "blob",
+    });
+  },
+};

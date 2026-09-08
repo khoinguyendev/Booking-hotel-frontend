@@ -136,3 +136,11 @@ export interface ShiftChangeRequest{
    newWorkDate :string;
     reason :string;
 }
+
+export interface OvertimeRequest {
+  workScheduleId: number;
+  workDate: string;
+  fromTime: string;
+  toTime: string;
+  reason: string;
+}

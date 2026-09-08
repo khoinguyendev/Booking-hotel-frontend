@@ -1,5 +1,6 @@
 'use client';
 
+import { RoomType } from '@/types/roomtype';
 import {
   BedDouble,
   CheckCircle2,
@@ -7,64 +8,37 @@ import {
   Wrench,
 } from 'lucide-react';
 
-interface Room {
-  id: number;
-  roomNumber: string;
-  floor: number;
-  status:
-    | 'Available'
-    | 'Occupied'
-    | 'Maintenance'
-    | 'Cleaning'
-    | 'OutOfService';
-  image: string;
-}
+
 
 interface Props {
-  rooms: Room[];
+  roomType: RoomType;
 }
 
-export default function RoomTypeOverview({ rooms }: Props) {
-  const total = rooms.length;
-
-  const available = rooms.filter(
-    (room) => room.status === 'Available'
-  ).length;
-
-  const occupied = rooms.filter(
-    (room) => room.status === 'Occupied'
-  ).length;
-
-  const maintenance = rooms.filter(
-    (room) => room.status === 'Maintenance'
-  ).length;
-
-  const cleaning = rooms.filter(
-    (room) => room.status === 'Cleaning'
-  ).length;
+export default function RoomTypeOverview({ roomType }: Props) {
+  
 
   const cards = [
     {
       title: 'Tổng phòng',
-      value: total,
+      value: roomType.roomCount,
       color: 'blue',
       icon: BedDouble,
     },
     {
       title: 'Phòng trống',
-      value: available,
+      value: roomType.availableCount,
       color: 'emerald',
       icon: DoorOpen,
     },
     {
       title: 'Đang sử dụng',
-      value: occupied,
+      value: roomType.occupiedCount,
       color: 'violet',
       icon: CheckCircle2,
     },
     {
       title: 'Bảo trì',
-      value: maintenance,
+      value: roomType.maintenanceCount,
       color: 'orange',
       icon: Wrench,
     },

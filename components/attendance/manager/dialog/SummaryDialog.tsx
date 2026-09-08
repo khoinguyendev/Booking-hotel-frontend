@@ -37,7 +37,7 @@ import {
 import Loading from "@/components/common/Spinner";
 
 const schema = z.object({
-  shiftId: z.number().min(1, "Chọn ca làm"),
+  shiftId: z.number().min(0 , "Chọn ca làm"),
 
   workDate: z.string().min(1, "Chọn ngày làm việc"),
 });
@@ -156,11 +156,30 @@ export default function SummaryDialog({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Chọn ca làm" />
+                       <span>
+              {field.value === 0
+                ? "Tất cả"
+                : (shifts.find((item) => item.id === field.value)?.name ??
+                  "Tất cả")}
+            </span>
                       </SelectTrigger>
                     </FormControl>
 
                     <SelectContent>
+                       <SelectItem
+                          key={0}
+                          value={String(
+                            0
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span>
+                              Tất cả
+                            </span>
+
+                           
+                          </div>
+                        </SelectItem>
                       {shifts.map((shift) => (
                         <SelectItem
                           key={shift.id}
